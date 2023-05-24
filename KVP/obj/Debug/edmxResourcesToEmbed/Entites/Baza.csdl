@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KVPBAZAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Cinema">
+    <Key>
+      <PropertyRef Name="idCinema" />
+    </Key>
+    <Property Name="idCinema" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameCinema" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="INNCinema" Type="Int32" />
+    <Property Name="Address" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Chief" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneChief" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Owner" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="PhonaOwner" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="District" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="BankCinema" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AccountCinema" Type="Int32" />
+    <Property Name="Capacity" Type="Int32" />
+    <NavigationProperty Name="Rents" Relationship="Self.FK_Rent_Cinema" FromRole="Cinema" ToRole="Rent" />
+  </EntityType>
+  <EntityType Name="Film">
+    <Key>
+      <PropertyRef Name="IdFilm" />
+    </Key>
+    <Property Name="IdFilm" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameFilm" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Comment" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Producer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Company" Type="String" MaxLength="505" FixedLength="false" Unicode="false" />
+    <Property Name="Year" Type="Int32" />
+    <Property Name="Land" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Time" Type="Time" Precision="7" />
+    <Property Name="Rate" Type="Decimal" Precision="2" Scale="1" />
+    <Property Name="Cost" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Purchases" Relationship="Self.FK_Purchase_Film" FromRole="Film" ToRole="Purchase" />
+    <NavigationProperty Name="Rents" Relationship="Self.FK_Rent_Film" FromRole="Film" ToRole="Rent" />
+  </EntityType>
+  <EntityType Name="Provider">
+    <Key>
+      <PropertyRef Name="IdProvider" />
+    </Key>
+    <Property Name="IdProvider" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameProvider" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="INN" Type="Int32" />
+    <Property Name="Address" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Bank" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Account" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Sing" Type="Boolean" />
+    <NavigationProperty Name="Purchases" Relationship="Self.FK_Purchase_Provider" FromRole="Provider" ToRole="Purchase" />
+  </EntityType>
+  <EntityType Name="Purchase">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdProvider" Type="Int32" />
+    <Property Name="IdFilm" Type="Int32" />
+    <Property Name="DateBuy" Type="DateTime" Precision="0" />
+    <Property Name="Summ" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Film" Relationship="Self.FK_Purchase_Film" FromRole="Purchase" ToRole="Film" />
+    <NavigationProperty Name="Provider" Relationship="Self.FK_Purchase_Provider" FromRole="Purchase" ToRole="Provider" />
+  </EntityType>
+  <EntityType Name="Rent">
+    <Key>
+      <PropertyRef Name="IdRent" />
+    </Key>
+    <Property Name="IdRent" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateStart" Type="DateTime" Precision="0" />
+    <Property Name="DateStop" Type="DateTime" Precision="0" />
+    <Property Name="Worker" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneWorker" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Summa" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Tax" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="IdCimena" Type="Int32" />
+    <Property Name="IdFilm" Type="Int32" />
+    <NavigationProperty Name="Cinema" Relationship="Self.FK_Rent_Cinema" FromRole="Rent" ToRole="Cinema" />
+    <NavigationProperty Name="Film" Relationship="Self.FK_Rent_Film" FromRole="Rent" ToRole="Film" />
+  </EntityType>
+  <Association Name="FK_Rent_Cinema">
+    <End Role="Cinema" Type="Self.Cinema" Multiplicity="0..1" />
+    <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cinema">
+        <PropertyRef Name="idCinema" />
+      </Principal>
+      <Dependent Role="Rent">
+        <PropertyRef Name="IdCimena" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Purchase_Film">
+    <End Role="Film" Type="Self.Film" Multiplicity="0..1" />
+    <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Film">
+        <PropertyRef Name="IdFilm" />
+      </Principal>
+      <Dependent Role="Purchase">
+        <PropertyRef Name="IdFilm" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rent_Film">
+    <End Role="Film" Type="Self.Film" Multiplicity="0..1" />
+    <End Role="Rent" Type="Self.Rent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Film">
+        <PropertyRef Name="IdFilm" />
+      </Principal>
+      <Dependent Role="Rent">
+        <PropertyRef Name="IdFilm" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Purchase_Provider">
+    <End Role="Provider" Type="Self.Provider" Multiplicity="0..1" />
+    <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Provider">
+        <PropertyRef Name="IdProvider" />
+      </Principal>
+      <Dependent Role="Purchase">
+        <PropertyRef Name="IdProvider" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="KVPBAZAEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cinemas" EntityType="Self.Cinema" />
+    <EntitySet Name="Films" EntityType="Self.Film" />
+    <EntitySet Name="Providers" EntityType="Self.Provider" />
+    <EntitySet Name="Purchases" EntityType="Self.Purchase" />
+    <EntitySet Name="Rents" EntityType="Self.Rent" />
+    <AssociationSet Name="FK_Rent_Cinema" Association="Self.FK_Rent_Cinema">
+      <End Role="Cinema" EntitySet="Cinemas" />
+      <End Role="Rent" EntitySet="Rents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Purchase_Film" Association="Self.FK_Purchase_Film">
+      <End Role="Film" EntitySet="Films" />
+      <End Role="Purchase" EntitySet="Purchases" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rent_Film" Association="Self.FK_Rent_Film">
+      <End Role="Film" EntitySet="Films" />
+      <End Role="Rent" EntitySet="Rents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Purchase_Provider" Association="Self.FK_Purchase_Provider">
+      <End Role="Provider" EntitySet="Providers" />
+      <End Role="Purchase" EntitySet="Purchases" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
